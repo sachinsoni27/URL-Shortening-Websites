@@ -1,7 +1,7 @@
 @echo off
-title LinkSnap - Build and Run
+title URL-Shortening-Websites - Build and Run
 echo ============================================
-echo  LinkSnap URL Shortener - Build and Run
+echo  URL-Shortening-Websites - Build and Run
 echo ============================================
 echo.
 
@@ -46,7 +46,7 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 echo.
-echo [4/4] Select database profile and start LinkSnap:
+echo [4/4] Select database profile and start URL-Shortening-Websites:
 echo   [1] H2 In-Memory Database (No setup required, runs instantly - recommended)
 echo   [2] Oracle SQL Database (Requires local Oracle XE running on port 1521)
 echo.

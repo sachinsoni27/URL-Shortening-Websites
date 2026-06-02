@@ -13,10 +13,10 @@
     </parent>
 
     <groupId>com.example</groupId>
-    <artifactId>url-shortener</artifactId>
+    <artifactId>url-shortening-websites</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>URL Shortener</name>
+    <name>URL-Shortening-Websites</name>
     <description>Production-grade URL shortening service with Oracle SQL and Redis</description>
 
     <properties>

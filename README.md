@@ -1,4 +1,4 @@
-# ⚡ LinkSnap — URL Shortener
+# ⚡ URL-Shortening-Websites
 
 **Technologies**: Java, Spring Boot, Hibernate/JPA, SQL, REST API, HTML, CSS
 

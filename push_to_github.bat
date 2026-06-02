@@ -1,7 +1,7 @@
 @echo off
-title LinkSnap - Git Push Helper
+title URL-Shortening-Websites - Git Push Helper
 echo ====================================================
-echo  LinkSnap URL Shortener - Setup Git and Push to GitHub
+echo  URL-Shortening-Websites - Setup Git and Push to GitHub
 echo ====================================================
 echo.
 echo This script will configure git, commit the files, 

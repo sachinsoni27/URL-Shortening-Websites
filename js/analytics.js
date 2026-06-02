@@ -12,19 +12,32 @@
 // Chart instances — kept so we can destroy before re-render
 const _charts = {};
 
-// Chart.js global defaults (dark theme)
-Chart.defaults.color           = '#94a3b8';
-Chart.defaults.borderColor     = 'rgba(255,255,255,.06)';
-Chart.defaults.font.family     = 'Inter, system-ui, sans-serif';
+// Chart.js global defaults (Neubrutalism theme)
+Chart.defaults.color           = '#000000';
+Chart.defaults.borderColor     = '#000000';
+Chart.defaults.font.family     = 'Space Grotesk, Inter, system-ui, sans-serif';
 Chart.defaults.font.size       = 12;
+Chart.defaults.font.weight     = 'bold';
 Chart.defaults.plugins.legend.labels.boxWidth = 12;
 Chart.defaults.plugins.legend.labels.padding  = 16;
-Chart.defaults.plugins.tooltip.backgroundColor = '#1e293b';
-Chart.defaults.plugins.tooltip.borderColor     = 'rgba(37,99,235,.4)';
-Chart.defaults.plugins.tooltip.borderWidth     = 1;
-Chart.defaults.plugins.tooltip.titleColor      = '#f8fafc';
-Chart.defaults.plugins.tooltip.bodyColor       = '#94a3b8';
+Chart.defaults.plugins.tooltip.backgroundColor = '#ffe600';
+Chart.defaults.plugins.tooltip.borderColor     = '#000000';
+Chart.defaults.plugins.tooltip.borderWidth     = 3;
+Chart.defaults.plugins.tooltip.titleColor      = '#000000';
+Chart.defaults.plugins.tooltip.bodyColor       = '#000000';
+Chart.defaults.plugins.tooltip.titleFont       = { weight: 'bold' };
+Chart.defaults.plugins.tooltip.bodyFont        = { weight: 'bold' };
 Chart.defaults.plugins.tooltip.padding         = 12;
+Chart.defaults.plugins.tooltip.cornerRadius    = 4;
+
+function updateChartDefaults() {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  Chart.defaults.color = isLight ? '#000000' : '#ffffff';
+  Chart.defaults.borderColor = isLight ? '#000000' : '#444444';
+  Chart.defaults.plugins.tooltip.backgroundColor = isLight ? '#ffe600' : '#1e1e1e';
+  Chart.defaults.plugins.tooltip.titleColor = isLight ? '#000000' : '#ffffff';
+  Chart.defaults.plugins.tooltip.bodyColor = isLight ? '#000000' : '#ffffff';
+}
 
 /**
  * Generate realistic demo analytics data for a given number of total clicks.
@@ -129,6 +142,8 @@ function renderDailyChart(data) {
   const values = data.dailyBreakdown.map(d => d.clicks);
   const maxVal = Math.max(...values);
 
+  updateChartDefaults();
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
   _charts.daily = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -136,16 +151,12 @@ function renderDailyChart(data) {
       datasets: [{
         label: 'Clicks',
         data: values,
-        backgroundColor: values.map(v =>
-          `rgba(37,99,235,${.3 + .5 * (v / (maxVal || 1))})`
-        ),
-        borderColor: values.map(v =>
-          `rgba(14,165,233,${.5 + .5 * (v / (maxVal || 1))})`
-        ),
+        backgroundColor: '#ff5c00',
+        borderColor: isLight ? '#000000' : '#ffffff',
         borderWidth: 2,
-        borderRadius: 8,
+        borderRadius: 0,
         borderSkipped: false,
-        hoverBackgroundColor: 'rgba(14,165,233,.8)',
+        hoverBackgroundColor: '#ffe600',
       }],
     },
     options: {
@@ -161,12 +172,12 @@ function renderDailyChart(data) {
       },
       scales: {
         x: {
-          grid: { display: false },
+          grid: { color: isLight ? '#000000' : '#444444', lineWidth: 1 },
           ticks: { maxRotation: 45, font: { size: 10 } },
         },
         y: {
           beginAtZero: true,
-          grid: { color: 'rgba(255,255,255,.04)' },
+          grid: { color: isLight ? '#000000' : '#444444', lineWidth: 1 },
           ticks: {
             stepSize: Math.ceil(maxVal / 5) || 1,
             callback: v => v.toLocaleString(),
@@ -187,14 +198,17 @@ function renderSourceChart(data) {
   const labels  = Object.keys(sources);
   const values  = Object.values(sources);
 
+  updateChartDefaults();
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
   _charts.source = new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels,
       datasets: [{
         data: values,
-        backgroundColor: ['#2563eb', '#0ea5e9', '#38bdf8'],
-        borderColor: 'transparent',
+        backgroundColor: ['#ffe600', '#00f0ff', '#ff007f'],
+        borderColor: isLight ? '#000000' : '#ffffff',
+        borderWidth: 2,
         hoverOffset: 8,
       }],
     },
@@ -224,6 +238,8 @@ function renderReferrerChart(data) {
   const labels = refs.map(r => r.referer);
   const values = refs.map(r => r.clicks);
 
+  updateChartDefaults();
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
   _charts.referrer = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -231,12 +247,12 @@ function renderReferrerChart(data) {
       datasets: [{
         label: 'Clicks',
         data: values,
-        backgroundColor: 'rgba(14,165,233,.25)',
-        borderColor: '#0ea5e9',
+        backgroundColor: '#00f0ff',
+        borderColor: isLight ? '#000000' : '#ffffff',
         borderWidth: 2,
-        borderRadius: 6,
+        borderRadius: 0,
         borderSkipped: false,
-        hoverBackgroundColor: 'rgba(14,165,233,.5)',
+        hoverBackgroundColor: '#ffe600',
       }],
     },
     options: {
@@ -246,7 +262,7 @@ function renderReferrerChart(data) {
       plugins: { legend: { display: false } },
       scales: {
         x: {
-          grid: { color: 'rgba(255,255,255,.04)' },
+          grid: { color: isLight ? '#000000' : '#444444', lineWidth: 1 },
           ticks: { callback: v => v.toLocaleString(), font: { size: 10 } },
         },
         y: {
@@ -268,14 +284,17 @@ function renderBrowserChart(data) {
   const labels   = Object.keys(browsers);
   const values   = Object.values(browsers);
 
+  updateChartDefaults();
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
   _charts.browser = new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels,
       datasets: [{
         data: values,
-        backgroundColor: ['#2563eb', '#3b82f6', '#0ea5e9', '#38bdf8', '#64748b'],
-        borderColor: 'transparent',
+        backgroundColor: ['#ffe600', '#ff5c00', '#00f0ff', '#ff007f', '#39ff14'],
+        borderColor: isLight ? '#000000' : '#ffffff',
+        borderWidth: 2,
         hoverOffset: 8,
       }],
     },

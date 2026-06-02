@@ -516,9 +516,9 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(updateHeroStats, 800);
 
   console.log(
-    '%c⚡ LinkSnap%c Showcase loaded\n%cBackend: %s | Demo: %s',
-    'color:#818cf8;font-size:1.2rem;font-weight:bold',
-    'color:#94a3b8;font-size:1rem',
+    '%c⚡ URL-Shortening-Websites%c Showcase loaded\n%cBackend: %s | Demo: %s',
+    'color:#ffe600;font-size:1.2rem;font-weight:bold;background:#000;padding:2px 6px;border:2px solid #000;box-shadow:2px 2px 0px #000;',
+    'color:#000;font-size:1rem',
     'color:#4b5563;font-size:.875rem',
     Config.API_BASE_URL,
     Config.FORCE_DEMO_MODE ? 'Forced ON' : 'Auto-detect',
