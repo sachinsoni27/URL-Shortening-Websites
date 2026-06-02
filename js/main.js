@@ -346,12 +346,10 @@ async function handleShortenSubmit(e) {
     result = await callShortenApi(payload);
 
     if (!result.ok && result.error === 'NETWORK') {
-      // Backend unreachable → fall back to demo mode
+      // Backend unreachable → fall back to demo mode silently
       isDemoMode = true;
-      document.getElementById('demo-mode-banner')?.classList.remove('hidden');
       await new Promise(r => setTimeout(r, 400));
       result = simulateShorten(payload);
-      window.showToast?.('Backend offline — running in demo mode', 'warn', 5000);
     }
   }
 

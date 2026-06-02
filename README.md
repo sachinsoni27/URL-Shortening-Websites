@@ -1,6 +1,10 @@
 # ⚡ LinkSnap — URL Shortener
 
-A production-grade URL shortening service built with **Java 17 + Spring Boot 3.x**, **Oracle SQL**, and **Redis** caching. Supports custom aliases, TTL expiry, click analytics, and a premium dark-mode frontend.
+**Technologies**: Java, Spring Boot, Hibernate/JPA, SQL, REST API, HTML, CSS
+
+* **Built a full-stack URL management web application** with Java Spring Boot backend, REST API layer, and HTML/CSS frontend.
+* **Designed and implemented RESTful APIs** using Spring Boot; used JPA/Hibernate for ORM-based database persistence and entity mapping.
+* **Integrated Oracle SQL database** for efficient URL storage, redirection logic, and query optimisation.
 
 ---
 
@@ -12,8 +16,6 @@ A production-grade URL shortening service built with **Java 17 + Spring Boot 3.x
 | Custom Aliases | User-defined URL-safe aliases with collision detection |
 | Link Expiry | Optional TTL in days; auto-expires and returns 410 Gone |
 | Click Analytics | Total/unique clicks, daily chart, top referrers, browser breakdown |
-| Redis Caching | Hot redirect path cached with 1-hour TTL — reduces DB load |
-| Async Tracking | Click events recorded on a background thread pool |
 | REST API | Full JSON API with consistent `ApiResponse<T>` envelope |
 | Responsive UI | Premium dark-mode HTML/CSS/JS frontend with Chart.js |
 
@@ -27,10 +29,9 @@ A production-grade URL shortening service built with **Java 17 + Spring Boot 3.x
 | Framework | Spring Boot 3.2.x |
 | ORM | Hibernate / Spring Data JPA |
 | Database | Oracle SQL (XE 21c) |
-| Cache | Redis 7 (Lettuce driver) |
 | Build | Maven 3.9+ |
 | Frontend | HTML5 + CSS3 + Vanilla JS + Chart.js |
-| Container | Docker + Docker Compose |
+
 
 ---
 
