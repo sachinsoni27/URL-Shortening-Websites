@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   -URL-Shortening-Websites — Frontend Application Logic
+   URL-Shortening-Websites — Frontend Application Logic
    Vanilla JS, no dependencies (except Chart.js for charts)
    ═══════════════════════════════════════════════════════════ */
 
