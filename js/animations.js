@@ -21,7 +21,7 @@
   const ctx = canvas.getContext('2d');
   let W, H, particles = [], RAF;
 
-  const COLORS = ['#6366f1', '#8b5cf6', '#a855f7', '#22d3ee', '#ec4899'];
+  const COLORS = ['#2563eb', '#3b82f6', '#0ea5e9', '#64748b', '#10b981'];
   const COUNT  = window.innerWidth < 768 ? 40 : 80;
 
   function resize() {
@@ -50,7 +50,7 @@
         const d  = Math.sqrt(dx * dx + dy * dy);
         if (d < DIST) {
           ctx.beginPath();
-          ctx.strokeStyle = `rgba(99,102,241,${(1 - d / DIST) * 0.08})`;
+          ctx.strokeStyle = `rgba(37,99,235,${(1 - d / DIST) * 0.08})`;
           ctx.lineWidth = .6;
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);

@@ -6,39 +6,39 @@
 /* ── 1. Design Tokens ───────────────────────────────────────────── */
 :root {
   /* Colors – dark theme (default) */
-  --bg:          #030712;
-  --bg-2:        #080d1a;
-  --surface:     #0d1121;
-  --surface-2:   #111827;
-  --card:        #141c2e;
-  --card-h:      #1a2540;
-  --input-bg:    #07091280;
-  --border:      rgba(255,255,255,.07);
-  --border-acc:  rgba(99,102,241,.4);
-  --border-card: rgba(255,255,255,.09);
+  --bg:          #080b10;
+  --bg-2:        #0c1017;
+  --surface:     #0f141e;
+  --surface-2:   #151b26;
+  --card:        #182030;
+  --card-h:      #202a3e;
+  --input-bg:    #090d1480;
+  --border:      rgba(148,163,184,.08);
+  --border-acc:  rgba(37,99,235,.4);
+  --border-card: rgba(148,163,184,.1);
 
   /* Brand */
-  --p1:   #6366f1;
-  --p2:   #8b5cf6;
-  --p3:   #a855f7;
-  --cyan: #22d3ee;
+  --p1:   #2563eb;
+  --p2:   #3b82f6;
+  --p3:   #0ea5e9;
+  --cyan: #38bdf8;
   --ok:   #10b981;
   --err:  #ef4444;
   --wrn:  #f59e0b;
 
   /* Gradients */
-  --g-brand:   linear-gradient(135deg, #6366f1 0%, #8b5cf6 55%, #a855f7 100%);
-  --g-text:    linear-gradient(90deg, #818cf8 0%, #c084fc 50%, #f472b6 100%);
-  --g-card:    linear-gradient(145deg, rgba(99,102,241,.06) 0%, rgba(139,92,246,.02) 100%);
-  --g-hero:    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99,102,241,.15) 0%, transparent 70%);
-  --g-glow:    0 0 80px rgba(99,102,241,.22);
-  --g-glow-sm: 0 0 30px rgba(99,102,241,.12);
+  --g-brand:   linear-gradient(135deg, #2563eb 0%, #3b82f6 55%, #0ea5e9 100%);
+  --g-text:    linear-gradient(90deg, #38bdf8 0%, #60a5fa 50%, #818cf8 100%);
+  --g-card:    linear-gradient(145deg, rgba(37,99,235,.05) 0%, rgba(14,165,233,.02) 100%);
+  --g-hero:    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37,99,235,.12) 0%, transparent 70%);
+  --g-glow:    0 0 80px rgba(37,99,235,.18);
+  --g-glow-sm: 0 0 30px rgba(37,99,235,.1);
 
   /* Text */
-  --t1: #f1f5ff;
+  --t1: #f8fafc;
   --t2: #94a3b8;
-  --t3: #4b5563;
-  --t4: #1f2937;
+  --t3: #64748b;
+  --t4: #334155;
 
   /* Fonts */
   --font:   'Inter', system-ui, -apple-system, sans-serif;
@@ -57,21 +57,21 @@
 
 /* Light theme override */
 [data-theme="light"] {
-  --bg:          #f8faff;
-  --bg-2:        #f1f5fd;
-  --surface:     #fff;
-  --surface-2:   #f1f5fd;
-  --card:        #fff;
-  --card-h:      #f5f7ff;
-  --input-bg:    #f8faff;
-  --border:      rgba(0,0,0,.08);
-  --border-card: rgba(0,0,0,.1);
+  --bg:          #f8fafc;
+  --bg-2:        #f1f5f9;
+  --surface:     #ffffff;
+  --surface-2:   #f1f5f9;
+  --card:        #ffffff;
+  --card-h:      #f8fafc;
+  --input-bg:    #f8fafc;
+  --border:      rgba(148,163,184,.15);
+  --border-card: rgba(148,163,184,.2);
   --t1: #0f172a;
   --t2: #475569;
-  --t3: #94a3b8;
-  --t4: #e2e8f0;
-  --g-card: linear-gradient(145deg, rgba(99,102,241,.04) 0%, rgba(139,92,246,.02) 100%);
-  --g-hero: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99,102,241,.08) 0%, transparent 70%);
+  --t3: #64748b;
+  --t4: #cbd5e1;
+  --g-card: linear-gradient(145deg, rgba(37,99,235,.04) 0%, rgba(14,165,233,.02) 100%);
+  --g-hero: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37,99,235,.06) 0%, transparent 70%);
 }
 
 /* ── 2. Base Reset ───────────────────────────────────────────────── */
@@ -230,10 +230,10 @@ strong { font-weight: 700; color: var(--t1); }
   position: absolute; border-radius: 50%;
   filter: blur(120px); opacity: .7;
 }
-.mo-1 { width: 900px; height: 900px; background: radial-gradient(circle, rgba(99,102,241,.18) 0%, transparent 70%); top:-30%; left:-20%; animation: orb 16s ease-in-out infinite; }
-.mo-2 { width: 700px; height: 700px; background: radial-gradient(circle, rgba(139,92,246,.13) 0%, transparent 70%); top:10%; right:-15%; animation: orb 20s ease-in-out infinite reverse; }
-.mo-3 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(34,211,238,.08) 0%, transparent 70%); bottom:0%; left:25%; animation: orb 14s ease-in-out infinite 2s; }
-.mo-4 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(236,72,153,.07) 0%, transparent 70%); bottom:20%; right:5%; animation: orb 18s ease-in-out infinite 4s; }
+.mo-1 { width: 900px; height: 900px; background: radial-gradient(circle, rgba(37,99,235,.18) 0%, transparent 70%); top:-30%; left:-20%; animation: orb 16s ease-in-out infinite; }
+.mo-2 { width: 700px; height: 700px; background: radial-gradient(circle, rgba(59,130,246,.13) 0%, transparent 70%); top:10%; right:-15%; animation: orb 20s ease-in-out infinite reverse; }
+.mo-3 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(14,165,233,.08) 0%, transparent 70%); bottom:0%; left:25%; animation: orb 14s ease-in-out infinite 2s; }
+.mo-4 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(71,85,105,.07) 0%, transparent 70%); bottom:20%; right:5%; animation: orb 18s ease-in-out infinite 4s; }
 @keyframes orb {
   0%,100% { transform: translate(0,0) scale(1); }
   33%      { transform: translate(40px,-40px) scale(1.08); }
@@ -242,8 +242,8 @@ strong { font-weight: 700; color: var(--t1); }
 .mesh-grid {
   position: absolute; inset: 0;
   background-image:
-    linear-gradient(rgba(99,102,241,.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99,102,241,.04) 1px, transparent 1px);
+    linear-gradient(rgba(37,99,235,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,235,.04) 1px, transparent 1px);
   background-size: 60px 60px;
   mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
 }

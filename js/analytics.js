@@ -19,10 +19,10 @@ Chart.defaults.font.family     = 'Inter, system-ui, sans-serif';
 Chart.defaults.font.size       = 12;
 Chart.defaults.plugins.legend.labels.boxWidth = 12;
 Chart.defaults.plugins.legend.labels.padding  = 16;
-Chart.defaults.plugins.tooltip.backgroundColor = '#141c2e';
-Chart.defaults.plugins.tooltip.borderColor     = 'rgba(99,102,241,.4)';
+Chart.defaults.plugins.tooltip.backgroundColor = '#1e293b';
+Chart.defaults.plugins.tooltip.borderColor     = 'rgba(37,99,235,.4)';
 Chart.defaults.plugins.tooltip.borderWidth     = 1;
-Chart.defaults.plugins.tooltip.titleColor      = '#f1f5ff';
+Chart.defaults.plugins.tooltip.titleColor      = '#f8fafc';
 Chart.defaults.plugins.tooltip.bodyColor       = '#94a3b8';
 Chart.defaults.plugins.tooltip.padding         = 12;
 
@@ -137,15 +137,15 @@ function renderDailyChart(data) {
         label: 'Clicks',
         data: values,
         backgroundColor: values.map(v =>
-          `rgba(99,102,241,${.3 + .5 * (v / (maxVal || 1))})`
+          `rgba(37,99,235,${.3 + .5 * (v / (maxVal || 1))})`
         ),
         borderColor: values.map(v =>
-          `rgba(139,92,246,${.5 + .5 * (v / (maxVal || 1))})`
+          `rgba(14,165,233,${.5 + .5 * (v / (maxVal || 1))})`
         ),
         borderWidth: 2,
         borderRadius: 8,
         borderSkipped: false,
-        hoverBackgroundColor: 'rgba(139,92,246,.8)',
+        hoverBackgroundColor: 'rgba(14,165,233,.8)',
       }],
     },
     options: {
@@ -193,7 +193,7 @@ function renderSourceChart(data) {
       labels,
       datasets: [{
         data: values,
-        backgroundColor: ['#6366f1', '#22d3ee', '#a855f7'],
+        backgroundColor: ['#2563eb', '#0ea5e9', '#38bdf8'],
         borderColor: 'transparent',
         hoverOffset: 8,
       }],
@@ -231,12 +231,12 @@ function renderReferrerChart(data) {
       datasets: [{
         label: 'Clicks',
         data: values,
-        backgroundColor: 'rgba(34,211,238,.25)',
-        borderColor: '#22d3ee',
+        backgroundColor: 'rgba(14,165,233,.25)',
+        borderColor: '#0ea5e9',
         borderWidth: 2,
         borderRadius: 6,
         borderSkipped: false,
-        hoverBackgroundColor: 'rgba(34,211,238,.5)',
+        hoverBackgroundColor: 'rgba(14,165,233,.5)',
       }],
     },
     options: {
@@ -274,7 +274,7 @@ function renderBrowserChart(data) {
       labels,
       datasets: [{
         data: values,
-        backgroundColor: ['#6366f1', '#8b5cf6', '#22d3ee', '#f472b6', '#94a3b8'],
+        backgroundColor: ['#2563eb', '#3b82f6', '#0ea5e9', '#38bdf8', '#64748b'],
         borderColor: 'transparent',
         hoverOffset: 8,
       }],

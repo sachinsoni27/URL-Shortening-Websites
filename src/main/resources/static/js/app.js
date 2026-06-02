@@ -382,8 +382,8 @@ function renderDailyChart(daily) {
       datasets: [{
         label: 'Clicks',
         data: daily.map(d => d.clicks),
-        backgroundColor: 'rgba(99, 102, 241, 0.5)',
-        borderColor: '#6366f1',
+        backgroundColor: 'rgba(37, 99, 235, 0.5)',
+        borderColor: '#2563eb',
         borderWidth: 2,
         borderRadius: 6,
         borderSkipped: false,
@@ -440,7 +440,7 @@ function renderBrowserChart(browsers) {
 
   const labels = Object.keys(browsers);
   const data = Object.values(browsers);
-  const colors = ['#6366f1','#8b5cf6','#3b82f6','#10b981','#f59e0b','#ef4444','#ec4899'];
+  const colors = ['#2563eb','#3b82f6','#0ea5e9','#38bdf8','#64748b'];
 
   state.browserChart = new Chart(ctx, {
     type: 'doughnut',
