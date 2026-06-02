@@ -36,7 +36,7 @@ public class RedirectController {
     private final UrlShortenerService urlShortenerService;
     private final ClickTrackingService clickTrackingService;
 
-    @GetMapping("/{code}")
+    @GetMapping("/{code:[a-zA-Z0-9\\-_]+}")
     public ResponseEntity<Void> redirect(
             @PathVariable String code,
             HttpServletRequest request) {

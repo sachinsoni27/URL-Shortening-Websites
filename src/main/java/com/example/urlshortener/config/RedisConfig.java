@@ -13,6 +13,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
 
+import org.springframework.context.annotation.Profile;
+
 /**
  * Redis cache configuration.
  *
@@ -23,6 +25,7 @@ import java.time.Duration;
  */
 @Configuration
 @EnableCaching
+@Profile("!dev")
 public class RedisConfig {
 
     @Bean

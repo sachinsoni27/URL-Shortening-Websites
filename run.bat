@@ -60,12 +60,12 @@ if "%DB_CHOICE%"=="2" (
     echo Starting in Oracle SQL database mode...
     echo Open http://localhost:8080 in your browser once the app starts.
     echo.
-    call "%MVN_CMD%" spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.cache.type=none -Dspring.autoconfigure.exclude=org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration,org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration"
+    call "%MVN_CMD%" spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.cache.type=simple -Dspring.autoconfigure.exclude=org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration,org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration"
 ) else (
     echo.
     echo Starting in H2 In-Memory database mode...
     echo Open http://localhost:8080 in your browser once the app starts.
     echo.
-    call "%MVN_CMD%" spring-boot:run -Dspring-boot.run.profiles=dev -Dspring-boot.run.jvmArguments="-Dspring.cache.type=none -Dspring.autoconfigure.exclude=org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration,org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration"
+    call "%MVN_CMD%" spring-boot:run -Dspring-boot.run.profiles=dev -Dspring-boot.run.jvmArguments="-Dspring.cache.type=simple -Dspring.autoconfigure.exclude=org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration,org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration"
 )
 pause

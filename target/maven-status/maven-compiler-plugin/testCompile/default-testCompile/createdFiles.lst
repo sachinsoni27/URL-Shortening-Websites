@@ -1,0 +1,4 @@
+com\example\urlshortener\controller\UrlShortenerControllerTest.class
+com\example\urlshortener\controller\RedirectControllerTest.class
+com\example\urlshortener\service\UrlShortenerServiceTest.class
+com\example\urlshortener\util\Base62EncoderTest.class
