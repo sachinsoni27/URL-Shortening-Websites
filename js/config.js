@@ -16,8 +16,11 @@ const Config = {
 
   /**
    * The short URL prefix shown to users in the UI.
+   * Dynamically uses the current host, defaulting to localhost:8080.
    */
-  SHORT_URL_PREFIX: 'linksnap.app',
+  SHORT_URL_PREFIX: window.location.protocol.startsWith('http')
+    ? `${window.location.protocol}//${window.location.host}`
+    : 'http://localhost:8080',
 
   /**
    * Timeout for API calls in milliseconds.
