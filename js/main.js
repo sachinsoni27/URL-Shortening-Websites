@@ -478,10 +478,28 @@ function initInputFeedback() {
   });
 }
 
-/* ══════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════
+   DYNAMIC PREFIX UPDATER
+   ══════════════════════════════════════════════ */
+function updateVisualPrefixes() {
+  const host = window.location.protocol.startsWith('http')
+    ? window.location.host
+    : 'localhost:8080';
+  
+  const displayHost = host + '/';
+  
+  document.querySelectorAll('.alias-prefix, .lookup-prefix').forEach(el => {
+    el.textContent = displayHost;
+  });
+}
+
+/* ══════════════════════════════════════════════
    BOOT
-══════════════════════════════════════════════════════════ */
+   ══════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
+  // Update UI visual prefixes dynamically
+  updateVisualPrefixes();
+
   // Form
   document.getElementById('shorten-form')?.addEventListener('submit', handleShortenSubmit);
 

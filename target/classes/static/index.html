@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LinkSnap — Lightning-Fast URL Shortener</title>
+    <meta name="description" content="Shorten, brand, and track your URLs with LinkSnap. Free URL shortener with real-time analytics, custom aliases, and link expiry." />
+    <meta name="keywords" content="URL shortener, link shortener, short URL, custom alias, link analytics" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Chart.js for analytics visualisation -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+    <!-- ─── Navigation ──────────────────────────────────────────────────────── -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+            <a class="logo" href="/">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">LinkSnap</span>
+            </a>
+            <div class="nav-links">
+                <a href="#shorten-section" class="nav-link">Shorten</a>
+                <a href="#dashboard-section" class="nav-link" id="nav-dashboard">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ─── Hero Section ────────────────────────────────────────────────────── -->
+    <section class="hero" id="shorten-section">
+        <div class="hero-bg">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Free &amp; Open-Source URL Shortener
+            </div>
+            <h1 class="hero-title">
+                Short links,<br/>
+                <span class="gradient-text">big impact.</span>
+            </h1>
+            <p class="hero-subtitle">
+                Transform long URLs into sharp, memorable links in seconds.
+                Track clicks, analyse traffic, and manage your links — all in one place.
+            </p>
+
+            <!-- Shorten Form -->
+            <div class="shorten-card" id="shorten-card">
+                <form id="shorten-form" autocomplete="off">
+                    <div class="input-group main-input-group">
+                        <div class="input-icon">🔗</div>
+                        <input
+                            type="url"
+                            id="long-url-input"
+                            class="main-input"
+                            placeholder="Paste your long URL here…"
+                            required
+                            aria-label="Long URL to shorten"
+                        />
+                    </div>
+
+                    <div class="options-row">
+                        <div class="option-field">
+                            <label for="alias-input" class="option-label">Custom alias <span class="optional-tag">optional</span></label>
+                            <div class="input-group">
+                                <span class="input-prefix">linksnap/</span>
+                                <input
+                                    type="text"
+                                    id="alias-input"
+                                    class="option-input"
+                                    placeholder="my-link"
+                                    maxlength="50"
+                                    pattern="[a-zA-Z0-9\-_]+"
+                                    aria-label="Custom alias"
+                                />
+                            </div>
+                        </div>
+                        <div class="option-field">
+                            <label for="ttl-select" class="option-label">Expiry <span class="optional-tag">optional</span></label>
+                            <select id="ttl-select" class="option-select" aria-label="Link expiry">
+                                <option value="">Never expires</option>
+                                <option value="1">1 day</option>
+                                <option value="7">7 days</option>
+                                <option value="30">30 days</option>
+                                <option value="90">90 days</option>
+                                <option value="365">1 year</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="shorten-btn" class="btn-primary">
+                        <span id="btn-text">Shorten URL</span>
+                        <span id="btn-spinner" class="spinner hidden" aria-hidden="true"></span>
+                    </button>
+                </form>
+
+                <!-- Error Message -->
+                <div id="error-msg" class="error-msg hidden" role="alert"></div>
+
+                <!-- Result Card -->
+                <div id="result-card" class="result-card hidden" role="status">
+                    <div class="result-header">
+                        <div class="result-icon">✅</div>
+                        <div class="result-title">Link created!</div>
+                    </div>
+                    <div class="result-url-row">
+                        <a id="result-short-url" href="#" target="_blank" class="result-short-url" rel="noopener noreferrer"></a>
+                        <button id="copy-btn" class="btn-copy" aria-label="Copy short URL to clipboard">
+                            <span id="copy-icon">📋</span>
+                            <span id="copy-label">Copy</span>
+                        </button>
+                    </div>
+                    <div class="result-meta">
+                        <span class="meta-item" id="result-original">
+                            <span class="meta-label">Original:</span>
+                            <span id="result-original-url" class="meta-value"></span>
+                        </span>
+                        <span class="meta-item" id="result-expires-container">
+                            <span class="meta-label">Expires:</span>
+                            <span id="result-expires" class="meta-value"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats bar -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-number" id="stat-total">—</span>
+                    <span class="stat-label">Links Created</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" id="stat-clicks">—</span>
+                    <span class="stat-label">Total Clicks</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Uptime</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── Dashboard Section ───────────────────────────────────────────────── -->
+    <section class="dashboard-section" id="dashboard-section">
+        <div class="section-header">
+            <h2 class="section-title">Your Links</h2>
+            <p class="section-subtitle">Manage and track all your shortened URLs</p>
+        </div>
+
+        <!-- Dashboard Controls -->
+        <div class="dashboard-controls">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="search-input" placeholder="Search links…" aria-label="Search links" />
+            </div>
+            <button id="refresh-btn" class="btn-secondary" aria-label="Refresh list">
+                <span id="refresh-icon">↻</span> Refresh
+            </button>
+        </div>
+
+        <!-- Loading Skeleton -->
+        <div id="table-skeleton" class="skeleton-container">
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
+        </div>
+
+        <!-- URL Table -->
+        <div class="table-wrapper" id="table-wrapper">
+            <table class="url-table" id="url-table" aria-label="Shortened URLs list">
+                <thead>
+                    <tr>
+                        <th>Short URL</th>
+                        <th>Original URL</th>
+                        <th>Clicks</th>
+                        <th>Created</th>
+                        <th>Expires</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="url-table-body"></tbody>
+            </table>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="empty-state hidden">
+            <div class="empty-icon">🔗</div>
+            <h3>No links yet</h3>
+            <p>Shorten your first URL above to get started!</p>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination">
+            <button id="prev-page" class="btn-page" disabled aria-label="Previous page">← Prev</button>
+            <span id="page-info" class="page-info">Page 1</span>
+            <button id="next-page" class="btn-page" aria-label="Next page">Next →</button>
+        </div>
+    </section>
+
+    <!-- ─── Analytics Modal ─────────────────────────────────────────────────── -->
+    <div id="analytics-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-label="Link analytics">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2 class="modal-title">📊 Link Analytics</h2>
+                <button id="modal-close" class="modal-close" aria-label="Close analytics">✕</button>
+            </div>
+            <div id="modal-body" class="modal-body">
+                <!-- Stats Grid -->
+                <div class="analytics-stats-grid">
+                    <div class="analytics-stat-card">
+                        <div class="analytics-stat-value" id="a-total-clicks">—</div>
+                        <div class="analytics-stat-label">Total Clicks</div>
+                    </div>
+                    <div class="analytics-stat-card">
+                        <div class="analytics-stat-value" id="a-unique-clicks">—</div>
+                        <div class="analytics-stat-label">Unique Visitors</div>
+                    </div>
+                    <div class="analytics-stat-card" id="a-code-card">
+                        <div class="analytics-stat-value" id="a-code">—</div>
+                        <div class="analytics-stat-label">Short Code</div>
+                    </div>
+                </div>
+
+                <!-- Daily Chart -->
+                <div class="chart-container">
+                    <h3 class="chart-title">Daily Clicks</h3>
+                    <canvas id="daily-chart" aria-label="Daily clicks chart"></canvas>
+                </div>
+
+                <!-- Two-column: Referrers + Browsers -->
+                <div class="analytics-split">
+                    <div class="analytics-table-section">
+                        <h3 class="analytics-section-title">Top Referrers</h3>
+                        <div id="referrer-list" class="referrer-list"></div>
+                    </div>
+                    <div class="analytics-table-section">
+                        <h3 class="analytics-section-title">Browser Breakdown</h3>
+                        <canvas id="browser-chart" aria-label="Browser breakdown chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Toast Notification ──────────────────────────────────────────────── -->
+    <div id="toast" class="toast hidden" role="alert" aria-live="polite"></div>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>

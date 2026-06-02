@@ -31,19 +31,21 @@ public class ClickTrackingService {
     /**
      * Record a single click event asynchronously.
      *
-     * @param mapping the URL mapping that was accessed
-     * @param request the HTTP request (for headers / IP)
+     * @param mapping   the URL mapping that was accessed
+     * @param ipAddress the client IP address
+     * @param userAgent the client User-Agent header
+     * @param referer   the client Referer header
      */
     @Async
     @Transactional
-    public void recordClick(UrlMapping mapping, HttpServletRequest request) {
+    public void recordClick(UrlMapping mapping, String ipAddress, String userAgent, String referer) {
         try {
             ClickEvent event = ClickEvent.builder()
                     .urlMapping(mapping)
                     .timestamp(Instant.now())
-                    .ipAddress(extractIpAddress(request))
-                    .userAgent(truncate(request.getHeader("User-Agent"), 512))
-                    .referer(truncate(request.getHeader("Referer"), 2048))
+                    .ipAddress(ipAddress)
+                    .userAgent(truncate(userAgent, 512))
+                    .referer(truncate(referer, 2048))
                     // Country lookup can be wired here via a GeoIP2 bean
                     .country(null)
                     .build();
@@ -57,22 +59,6 @@ public class ClickTrackingService {
     }
 
     // ─── Helpers ─────────────────────────────────────────────────────────────
-
-    /**
-     * Extract the real client IP, honouring X-Forwarded-For from proxies.
-     */
-    private String extractIpAddress(HttpServletRequest request) {
-        String xForwardedFor = request.getHeader("X-Forwarded-For");
-        if (xForwardedFor != null && !xForwardedFor.isBlank()) {
-            // May be a comma-separated chain; take the first (original client)
-            return xForwardedFor.split(",")[0].trim();
-        }
-        String realIp = request.getHeader("X-Real-IP");
-        if (realIp != null && !realIp.isBlank()) {
-            return realIp.trim();
-        }
-        return request.getRemoteAddr();
-    }
 
     /** Safely truncate a string to a maximum length, returning null if input is null. */
     private String truncate(String value, int maxLen) {

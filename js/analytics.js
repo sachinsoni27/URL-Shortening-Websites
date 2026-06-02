@@ -338,7 +338,12 @@ async function loadAnalytics(code) {
 
   // Update chip
   const chip = document.getElementById('modal-url-chip');
-  if (chip) chip.textContent = `linksnap.app/${code || 'demo'}`;
+  if (chip) {
+    const host = window.location.protocol.startsWith('http')
+      ? window.location.host
+      : 'localhost:8080';
+    chip.textContent = `${host}/${code || 'demo'}`;
+  }
 
   window.showToast?.(`Analytics loaded for "${code || 'demo'}"`, 'ok');
 }

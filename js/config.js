@@ -28,10 +28,10 @@ const Config = {
   API_TIMEOUT_MS: 8000,
 
   /**
-   * TRUE  → pure frontend mode, all data in localStorage (default).
-   * FALSE → calls the Spring Boot REST API; falls back if unreachable.
+   * TRUE  → pure frontend mode, all data in localStorage.
+   * FALSE → calls the Spring Boot REST API; falls back if unreachable (default).
    */
-  FORCE_DEMO_MODE: true,
+  FORCE_DEMO_MODE: false,
 
   /**
    * Baseline stats displayed in the hero counters.

@@ -46,8 +46,13 @@ public class RedirectController {
         // Resolve from cache or DB (throws UrlNotFoundException / UrlExpiredException)
         UrlMapping mapping = urlShortenerService.resolve(code);
 
+        // Extract client information synchronously before the request context is recycled
+        String ipAddress = extractIpAddress(request);
+        String userAgent = request.getHeader("User-Agent");
+        String referer = request.getHeader("Referer");
+
         // Async: record click without blocking the response
-        clickTrackingService.recordClick(mapping, request);
+        clickTrackingService.recordClick(mapping, ipAddress, userAgent, referer);
 
         // Async-safe: increment the denormalized counter via JPQL UPDATE
         urlShortenerService.incrementClicks(mapping.getId());
@@ -55,5 +60,21 @@ public class RedirectController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(mapping.getLongUrl()));
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    }
+
+    /**
+     * Extract the real client IP, honouring X-Forwarded-For from proxies.
+     */
+    private String extractIpAddress(HttpServletRequest request) {
+        String xForwardedFor = request.getHeader("X-Forwarded-For");
+        if (xForwardedFor != null && !xForwardedFor.isBlank()) {
+            // May be a comma-separated chain; take the first (original client)
+            return xForwardedFor.split(",")[0].trim();
+        }
+        String realIp = request.getHeader("X-Real-IP");
+        if (realIp != null && !realIp.isBlank()) {
+            return realIp.trim();
+        }
+        return request.getRemoteAddr();
     }
 }

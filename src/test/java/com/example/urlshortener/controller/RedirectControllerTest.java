@@ -48,7 +48,7 @@ class RedirectControllerTest {
                 .build();
 
         when(urlShortenerService.resolve("abc123")).thenReturn(mapping);
-        doNothing().when(clickTrackingService).recordClick(any(), any());
+        doNothing().when(clickTrackingService).recordClick(any(), any(), any(), any());
         doNothing().when(urlShortenerService).incrementClicks(1L);
 
         mockMvc.perform(get("/abc123"))
@@ -90,13 +90,13 @@ class RedirectControllerTest {
                 .clicks(10L).createdAt(Instant.now()).build();
 
         when(urlShortenerService.resolve("track01")).thenReturn(mapping);
-        doNothing().when(clickTrackingService).recordClick(any(), any());
+        doNothing().when(clickTrackingService).recordClick(any(), any(), any(), any());
         doNothing().when(urlShortenerService).incrementClicks(2L);
 
         mockMvc.perform(get("/track01")).andExpect(status().isFound());
 
         // Verify click tracking was triggered
-        verify(clickTrackingService).recordClick(eq(mapping), any());
+        verify(clickTrackingService).recordClick(eq(mapping), any(), any(), any());
         verify(urlShortenerService).incrementClicks(2L);
     }
 }
