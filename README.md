@@ -1,0 +1,304 @@
+# ⚡ LinkSnap — URL Shortener
+
+A production-grade URL shortening service built with **Java 17 + Spring Boot 3.x**, **Oracle SQL**, and **Redis** caching. Supports custom aliases, TTL expiry, click analytics, and a premium dark-mode frontend.
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+|---|---|
+| URL Shortening | Base62-encoded 6-char codes from Oracle sequence IDs |
+| Custom Aliases | User-defined URL-safe aliases with collision detection |
+| Link Expiry | Optional TTL in days; auto-expires and returns 410 Gone |
+| Click Analytics | Total/unique clicks, daily chart, top referrers, browser breakdown |
+| Redis Caching | Hot redirect path cached with 1-hour TTL — reduces DB load |
+| Async Tracking | Click events recorded on a background thread pool |
+| REST API | Full JSON API with consistent `ApiResponse<T>` envelope |
+| Responsive UI | Premium dark-mode HTML/CSS/JS frontend with Chart.js |
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Language | Java 17 |
+| Framework | Spring Boot 3.2.x |
+| ORM | Hibernate / Spring Data JPA |
+| Database | Oracle SQL (XE 21c) |
+| Cache | Redis 7 (Lettuce driver) |
+| Build | Maven 3.9+ |
+| Frontend | HTML5 + CSS3 + Vanilla JS + Chart.js |
+| Container | Docker + Docker Compose |
+
+---
+
+## 🚀 Quick Start
+
+### Option A — Docker Compose (Recommended)
+
+```bash
+# Build and start all services (Oracle DB, Redis, Spring Boot app)
+docker-compose up --build
+
+# Application will be available at:
+http://localhost:8080
+```
+
+> **Note**: Oracle XE takes ~2 minutes to initialize on first run. The app will wait for the health check before starting.
+
+---
+
+### Option B — Local Development
+
+#### Prerequisites
+- Java 17+
+- Maven 3.9+
+- Oracle XE 21c (or any Oracle DB) with a user `url_shortener`
+- Redis 7 running on `localhost:6379`
+
+#### 1. Configure the database
+
+Create the Oracle user and grant privileges:
+```sql
+CREATE USER url_shortener IDENTIFIED BY url_shortener;
+GRANT CONNECT, RESOURCE, CREATE SESSION TO url_shortener;
+GRANT UNLIMITED TABLESPACE TO url_shortener;
+```
+
+#### 2. Update `application.yml`
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521/XEPDB1
+    username: url_shortener
+    password: url_shortener
+  data:
+    redis:
+      host: localhost
+      port: 6379
+server:
+  base-url: http://localhost:8080
+```
+
+#### 3. Build and run
+
+```bash
+# Build
+./mvnw clean package -DskipTests
+
+# Run
+java -jar target/url-shortener-1.0.0.jar
+
+# Or with Maven
+./mvnw spring-boot:run
+```
+
+#### 4. Open the app
+
+```
+http://localhost:8080
+```
+
+---
+
+## 🔌 REST API
+
+All endpoints return:
+```json
+{ "success": true, "data": { ... }, "error": null }
+```
+
+### POST /api/shorten — Create a shortened URL
+
+```bash
+curl -X POST http://localhost:8080/api/shorten \
+  -H "Content-Type: application/json" \
+  -d '{
+    "longUrl": "https://www.example.com/very/long/url?param=value",
+    "customAlias": "my-link",
+    "ttlDays": 30
+  }'
+```
+
+**Response** `201 Created`:
+```json
+{
+  "success": true,
+  "data": {
+    "shortUrl": "http://localhost:8080/my-link",
+    "code": "my-link",
+    "longUrl": "https://www.example.com/very/long/url?param=value",
+    "createdAt": "2024-01-15T10:30:00Z",
+    "expiresAt": "2024-02-14T10:30:00Z",
+    "clicks": 0
+  }
+}
+```
+
+---
+
+### GET /{code} — Redirect
+
+```bash
+curl -L http://localhost:8080/my-link
+# → HTTP 302 redirect to the original URL
+```
+
+| Status | Meaning |
+|---|---|
+| 302 | Successful redirect |
+| 404 | Short code not found |
+| 410 | Link has expired |
+
+---
+
+### GET /api/analytics/{code} — Click Analytics
+
+```bash
+curl http://localhost:8080/api/analytics/my-link
+```
+
+**Response** `200 OK`:
+```json
+{
+  "success": true,
+  "data": {
+    "code": "my-link",
+    "longUrl": "https://example.com/...",
+    "totalClicks": 142,
+    "uniqueClicks": 89,
+    "dailyBreakdown": [
+      { "date": "2024-01-15", "clicks": 12 },
+      { "date": "2024-01-16", "clicks": 35 }
+    ],
+    "topReferrers": [
+      { "referer": "https://twitter.com", "clicks": 45 },
+      { "referer": "Direct", "clicks": 44 }
+    ],
+    "browserBreakdown": {
+      "Chrome": 88,
+      "Safari": 31,
+      "Firefox": 23
+    }
+  }
+}
+```
+
+---
+
+### GET /api/urls — List All URLs (Paginated)
+
+```bash
+curl "http://localhost:8080/api/urls?page=0&size=20"
+```
+
+---
+
+### DELETE /api/urls/{id} — Delete a URL
+
+```bash
+curl -X DELETE http://localhost:8080/api/urls/42
+# → 204 No Content
+```
+
+---
+
+## 🧪 Running Tests
+
+```bash
+# All tests
+./mvnw test
+
+# Specific test class
+./mvnw test -Dtest=Base62EncoderTest
+
+# With coverage report
+./mvnw test jacoco:report
+```
+
+Test coverage includes:
+- **Unit tests**: `Base62Encoder`, `UrlShortenerService` (Mockito)
+- **Controller tests**: `@WebMvcTest` for all three controllers
+- **Redirect tests**: Valid, expired, and unknown codes
+
+---
+
+## 🗄 Database Schema
+
+Oracle DDL is auto-generated by Hibernate on startup (`ddl-auto: update`).
+
+### `url_mappings`
+
+| Column | Type | Notes |
+|---|---|---|
+| `id` | NUMBER (PK) | Oracle sequence |
+| `code` | VARCHAR2(20) | UNIQUE, indexed |
+| `long_url` | VARCHAR2(2048) | NOT NULL |
+| `custom_alias` | VARCHAR2(100) | UNIQUE, nullable |
+| `created_at` | TIMESTAMP | Auto-set |
+| `expires_at` | TIMESTAMP | Nullable |
+| `clicks` | NUMBER | Denormalized counter |
+
+### `click_events`
+
+| Column | Type | Notes |
+|---|---|---|
+| `id` | NUMBER (PK) | Oracle sequence |
+| `url_mapping_id` | NUMBER (FK) | → url_mappings.id |
+| `timestamp` | TIMESTAMP | |
+| `ip_address` | VARCHAR2(45) | |
+| `user_agent` | VARCHAR2(512) | |
+| `referer` | VARCHAR2(2048) | Nullable |
+| `country` | VARCHAR2(10) | Nullable |
+
+**Indexes**:
+- `idx_url_mappings_code` — unique index on `code`
+- `idx_url_mappings_alias` — unique index on `custom_alias`
+- `idx_click_events_mapping_ts` — composite on `(url_mapping_id, timestamp)`
+
+---
+
+## 🏗 Project Structure
+
+```
+url-shortener/
+├── src/main/java/com/example/urlshortener/
+│   ├── config/         # Redis, Async thread pool
+│   ├── controller/     # REST controllers (Shorten, Redirect, Analytics)
+│   ├── dto/            # Request/Response/Wrapper DTOs
+│   ├── exception/      # Custom exceptions + GlobalExceptionHandler
+│   ├── model/          # JPA entities (UrlMapping, ClickEvent)
+│   ├── repository/     # Spring Data JPA repositories
+│   ├── service/        # Business logic (Shortener, Analytics, ClickTracking)
+│   ├── util/           # Base62Encoder, UrlValidator
+│   └── UrlShortenerApplication.java
+├── src/main/resources/
+│   ├── application.yml
+│   └── static/         # HTML, CSS, JS frontend
+├── src/test/           # JUnit 5 unit + slice tests
+├── Dockerfile
+├── docker-compose.yml
+└── README.md
+```
+
+---
+
+## ⚙️ Configuration Reference
+
+| Property | Default | Description |
+|---|---|---|
+| `server.base-url` | `http://localhost:8080` | Used in short URL generation |
+| `spring.datasource.url` | Oracle thin JDBC URL | Database connection |
+| `spring.data.redis.host` | `localhost` | Redis host |
+| `spring.data.redis.port` | `6379` | Redis port |
+| `spring.cache.redis.time-to-live` | `3600000` ms | Cache TTL (1 hour) |
+| `spring.jpa.hibernate.ddl-auto` | `update` | Schema management |
+
+---
+
+## 📄 License
+
+MIT — free to use and modify.

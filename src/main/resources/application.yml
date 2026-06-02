@@ -1,0 +1,77 @@
+server:
+  port: 8080
+  # Base URL used when constructing shortened URLs in responses
+  # Change this to your domain in production
+  base-url: http://localhost:8080
+
+spring:
+  application:
+    name: url-shortener
+
+  # ─── Oracle Datasource ──────────────────────────────────────────────────────
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521/XEPDB1
+    username: url_shortener
+    password: url_shortener
+    driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      pool-name: UrlShortenerPool
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 30000
+      connection-timeout: 20000
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1 FROM DUAL
+
+  # ─── JPA / Hibernate ────────────────────────────────────────────────────────
+  jpa:
+    database-platform: org.hibernate.dialect.OracleDialect
+    hibernate:
+      ddl-auto: update          # Use 'validate' or 'none' in production
+    show-sql: false
+    open-in-view: false         # Disable OSIV for performance
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 50        # Batch insert optimization
+        order_inserts: true
+        order_updates: true
+        generate_statistics: false
+
+  # ─── Redis ──────────────────────────────────────────────────────────────────
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 2
+          max-wait: 1000ms
+
+  # ─── Cache ──────────────────────────────────────────────────────────────────
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000     # 1 hour default TTL (ms)
+      cache-null-values: false
+
+# ─── Actuator ───────────────────────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, caches
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# ─── Logging ────────────────────────────────────────────────────────────────
+logging:
+  level:
+    com.example.urlshortener: INFO
+    org.hibernate.SQL: WARN
+    org.springframework.cache: INFO
